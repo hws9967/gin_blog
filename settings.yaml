@@ -1,0 +1,27 @@
+redis:
+  db: 0
+  addr: 127.0.0.1:6379
+  password:
+
+mysql:
+  host: 127.0.0.1
+  port: "3306"
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db: gvb
+  username: root
+  password: 395621926
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: error
+
+logger:
+    level: info
+    prefix: '[gin-vue-log]'
+    director: log
+    show-line: true
+    log-in-console: true
+
+system:
+      env: test
+      ip: 0.0.0.0
+      port: 7000
