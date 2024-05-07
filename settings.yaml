@@ -16,7 +16,7 @@ mysql:
 
 logger:
     level: info
-    prefix: '[gin-vue-log]'
+    prefix: '[gin-blog-log]'
     director: log
     show-line: true
     log-in-console: true
