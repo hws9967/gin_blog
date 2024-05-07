@@ -12,6 +12,7 @@ import (
 )
 
 var (
+	Config   *config.Config
 	DB       *gorm.DB
 	DBList   map[string]*gorm.DB
 	REDIS    *redis.Client
