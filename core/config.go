@@ -12,9 +12,9 @@ import (
 const configFile = "settings.yaml"
 
 // ConfInit 读取yaml配置
-func ConfInit() {
+func ConfInit() config.Server {
 
-	c := &config.Config{}
+	c := &config.Server{}
 	yamlConf, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		panic(fmt.Errorf("get yamlConf error: %s", err))
@@ -25,7 +25,7 @@ func ConfInit() {
 		logrus.Fatalf("config Init Unmarshal: %v", err)
 	}
 	logrus.Println("config yamlFile load Init success.")
-	fmt.Println(c)
+	return *c
 }
 
 func SetYaml(conf config.Server) {

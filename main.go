@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"gin_blog/core"
 	"gin_blog/global"
 )
 
 func main() {
-	core.ConfInit()
-	fmt.Println(global.CONFIG)
+	global.CONFIG = core.ConfInit()
+	global.LOG = core.InitLogger()
+	global.DB = core.Gorm()
 }
