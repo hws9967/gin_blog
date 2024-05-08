@@ -25,5 +25,8 @@ func InitRouter() *gin.Engine {
 
 	routerGroupApp := RouterGroup{router}
 	routerGroupApp.SettingsRouter()
+
+	PublicGroup := router.Group("api")
+	apiRouterGroup.SettingsRouter1(PublicGroup)
 	return router
 }
