@@ -6,6 +6,7 @@ import (
 	"gin_blog/global"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"io/fs"
 	"io/ioutil"
 )
 
@@ -34,7 +35,7 @@ func SetYaml(conf config.Server) {
 		global.LOG.Error(err)
 		return
 	}
-	err = ioutil.WriteFile(configFile, data, 0777)
+	err = ioutil.WriteFile(configFile, data, fs.ModePerm)
 	if err != nil {
 		global.LOG.Error(err)
 		return
