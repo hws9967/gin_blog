@@ -2,6 +2,7 @@ package config
 
 type Server struct {
 	Mysql    Mysql    `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Local    Local    `mapstructure:"local" json:"local" yaml:"local"`
 	Jwy      Jwy      `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	QQ       QQ       `mapstructure:"qq" json:"qq" yaml:"qq"`
 	Loggers  Loggers  `mapstructure:"logger" json:"logger" yaml:"logger"`
