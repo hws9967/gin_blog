@@ -29,6 +29,7 @@ func (i ImageApi) ImageUploadView(c *gin.Context) {
 		response.FailWithMessage("不存在文件，请上传图片--", c)
 		return
 	}
+
 	var resList []FileUploadResponse
 	for _, file := range files {
 		filePath := path.Join("uploads", file.Filename)
