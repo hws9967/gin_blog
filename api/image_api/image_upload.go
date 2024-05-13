@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"gin_blog/global"
 	response "gin_blog/models/common"
+	"gin_blog/plugins/qiniu"
 	"github.com/gin-gonic/gin"
+	"io"
 	"path"
 )
 
@@ -54,15 +56,23 @@ func (i ImageApi) ImageUploadView(c *gin.Context) {
 
 }
 
-func (i ImageApi) ImageUploadView1(c *gin.Context) {
-	fileHeader, err := c.FormFile("image")
+// ImageUpload 图片上传到七牛云
+func (i ImageApi) ImageUpload(c *gin.Context) {
+	file, err := c.FormFile("image")
+	if err != nil {
+		response.FailWithMessage("请上传图片", c)
+		return
+	}
+
+	// 打开文件
+	readFile, _ := file.Open()
+	// 读取文件内容
+	fileData, _ := io.ReadAll(readFile)
+	filePath, err := qiniu.UploadImage(fileData, "gin_blog")
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	response.OkWithDetailed(filePath, "文件上传成功", c)
 
-	// 获取文件名
-	fmt.Println(fileHeader.Header)
-	fmt.Println(fileHeader.Size)
-	fmt.Println(fileHeader.Filename)
 }

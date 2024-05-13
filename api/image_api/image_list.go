@@ -27,6 +27,7 @@ func (i ImageApi) ImageListView(c *gin.Context) {
 		ImageType: image_type.ImageType(cr.ImageType),
 	}, commont_ser.ListOption{
 		Page: cr.PageInfo,
+		//Debug: true,
 		Where: []string{
 			"not_use = false",
 		},
