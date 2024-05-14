@@ -1,69 +1,70 @@
 package response
 
 import (
+	"gin_blog/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type Response struct {
-	Code int         `json:"code"`
-	Data interface{} `json:"data"`
-	Msg  string      `json:"msg"`
+	Code int    `json:"code"`
+	Data any    `json:"data"`
+	Msg  string `json:"msg"`
 }
-
-// ListResponse 用于列表页面的通用返回值
 type ListResponse[T any] struct {
-	List  []T `json:"list"`  // 列表数据
-	Count any `json:"count"` // 返回的总数
+	Count int64 `json:"count"`
+	List  T     `json:"list"`
 }
 
 const (
-	ERROR   = 7
-	SUCCESS = 0
+	Success = 0
+	Error   = 7
 )
 
 func Result(code int, data any, msg string, c *gin.Context) {
-	// 开始时间
 	c.JSON(http.StatusOK, Response{
-		code,
-		data,
-		msg,
+		Code: code,
+		Data: data,
+		Msg:  msg,
 	})
 }
 
-func Ok(c *gin.Context) {
-	Result(SUCCESS, map[string]interface{}{}, "操作成功", c)
+func Ok(data any, msg string, c *gin.Context) {
+	Result(Success, data, msg, c)
+}
+func OkWithData(data any, c *gin.Context) {
+	Result(Success, data, "成功", c)
 }
 
-func OkWithMessage(message string, c *gin.Context) {
-	Result(SUCCESS, map[string]interface{}{}, message, c)
-}
-
-func OkWithData(data interface{}, c *gin.Context) {
-	Result(SUCCESS, data, "查询成功", c)
-}
-
-func OkWithDetailed(data interface{}, message string, c *gin.Context) {
-	Result(SUCCESS, data, message, c)
-}
-func OkWithList[T any](List []T, count any, c *gin.Context) {
-	if len(List) == 0 {
-		List = []T{}
-	}
-	Result(SUCCESS, ListResponse[T]{
-		List:  List,
+func OkWithList(list any, count int64, c *gin.Context) {
+	OkWithData(ListResponse[any]{
+		List:  list,
 		Count: count,
-	}, "成功", c)
+	}, c)
 }
 
-func Fail(c *gin.Context) {
-	Result(ERROR, map[string]interface{}{}, "操作失败", c)
+func OkWithMessage(msg string, c *gin.Context) {
+	Result(Success, map[string]any{}, msg, c)
+}
+func OkWith(c *gin.Context) {
+	Result(Success, map[string]any{}, "成功", c)
 }
 
-func FailWithMessage(message string, c *gin.Context) {
-	Result(ERROR, map[string]interface{}{}, message, c)
+func Fail(data any, msg string, c *gin.Context) {
+	Result(Error, data, msg, c)
 }
-
-func FailWithDetailed(data interface{}, message string, c *gin.Context) {
-	Result(ERROR, data, message, c)
+func FailWithMessage(msg string, c *gin.Context) {
+	Result(Error, map[string]any{}, msg, c)
+}
+func FailWithError(err error, obj any, c *gin.Context) {
+	msg := utils.GetValidMsg(err, obj)
+	FailWithMessage(msg, c)
+}
+func FailWithCode(code ErrorCode, c *gin.Context) {
+	msg, ok := ErrorMap[code]
+	if ok {
+		Result(int(code), map[string]any{}, msg, c)
+		return
+	}
+	Result(Error, map[string]any{}, "未知错误", c)
 }

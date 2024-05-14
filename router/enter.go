@@ -15,7 +15,7 @@ type RouterGroup struct {
 }
 
 func InitRouter() *gin.Engine {
-	gin.SetMode(global.CONFIG.System.Env)
+	gin.SetMode(global.Config.System.Env)
 	router := gin.Default()
 
 	// 系统设置

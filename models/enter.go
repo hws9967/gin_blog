@@ -8,17 +8,14 @@ type MODEL struct {
 	UpdatedAt time.Time `json:"-"`                    // 更新时间
 }
 
-// PageInfo Paging common input parameter structure
+// PageInfo 公共的请求参数
 type PageInfo struct {
-	Page  int      `json:"page" form:"page"`   // 页码
-	Limit int      `json:"limit" form:"limit"` // 每页条数
-	Key   string   `json:"key" form:"key"`     // 关键字
-	Sort  string   `json:"sort" form:"sort"`   // 排序
-	Like  []string `json:"like" form:"like"`   // 需要模糊匹配的列表
+	Page  int    `form:"page"`  // 页码
+	Key   string `form:"key"`   // 关键字
+	Limit int    `form:"limit"` // 每页条数
+	Sort  string `form:"sort"`  // 排序
 }
 
-// ResponseList 公共的返回
-type ResponseList struct {
-	List  any `json:"list"`
-	Count any `json:"count"`
+type RemoveRequest struct {
+	IDList []uint `json:"id_list"`
 }

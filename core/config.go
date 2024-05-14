@@ -4,40 +4,38 @@ import (
 	"fmt"
 	"gin_blog/config"
 	"gin_blog/global"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"io/fs"
 	"io/ioutil"
+	"log"
 )
 
-const configFile = "settings.yaml"
+const ConfigFile = "settings.yaml"
 
-// ConfInit 读取yaml配置
-func ConfInit() config.Server {
-
-	c := &config.Server{}
-	yamlConf, err := ioutil.ReadFile(configFile)
+// InitConf 读取yaml文件的配置
+func InitConf() {
+	c := &config.Config{}
+	yamlConf, err := ioutil.ReadFile(ConfigFile)
 	if err != nil {
 		panic(fmt.Errorf("get yamlConf error: %s", err))
 	}
-
 	err = yaml.Unmarshal(yamlConf, c)
 	if err != nil {
-		logrus.Fatalf("config Init Unmarshal: %v", err)
+		log.Fatalf("config Init Unmarshal: %v", err)
 	}
-	logrus.Println("config yamlFile load Init success.")
-	return *c
+	log.Println("config yamlFile load Init success.")
+	global.Config = c
 }
 
-func SetYaml(conf config.Server) {
-	data, err := yaml.Marshal(conf)
+func SetYaml() error {
+	byteData, err := yaml.Marshal(global.Config)
 	if err != nil {
-		global.LOG.Error(err)
-		return
+		return err
 	}
-	err = ioutil.WriteFile(configFile, data, fs.ModePerm)
+	err = ioutil.WriteFile(ConfigFile, byteData, fs.ModePerm)
 	if err != nil {
-		global.LOG.Error(err)
-		return
+		return err
 	}
+	global.Log.Info("配置文件修改成功")
+	return nil
 }

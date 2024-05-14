@@ -4,37 +4,33 @@ import (
 	"gin_blog/global"
 	"gin_blog/models"
 	response "gin_blog/models/common"
-	"gin_blog/plugins/logstash/lm"
 	"github.com/gin-gonic/gin"
 )
 
 type ImageUpdateRequest struct {
-	Sort int    `json:"sort"`
-	Name string `json:"name"`
+	ID   uint   `json:"id" binding:"required" msg:"请选择文件id"`
+	Name string `json:"name" binding:"required" msg:"请输入文件名称"`
 }
 
-func (ImageApi) ImageUpdate(c *gin.Context) {
-	id := c.Param("id")
+func (ImageApi) ImageUpdateView(c *gin.Context) {
 	var cr ImageUpdateRequest
 	err := c.ShouldBindJSON(&cr)
 	if err != nil {
-		response.FailWithMessage("类型错误", c)
+		response.FailWithError(err, &cr, c)
 		return
 	}
-	var image models.ImageModel
-	// 名字不能重名
-	err = global.DB.Take(&image, "name = ?", cr.Name).Error
-	if err == nil {
-		// 找到了
-		response.FailWithMessage("图片名称不能重复", c)
+	var imageModel models.BannerModel
+	err = global.DB.Take(&imageModel, cr.ID).Error
+	if err != nil {
+		response.FailWithMessage("文件不存在", c)
 		return
 	}
-	lm.LoggerApp.Send("更新图片名称", c)
-	global.DB.Take(&image, id).UpdateColumns(map[string]any{
-		"sort": cr.Sort,
-		"name": cr.Name,
-	})
-	response.OkWithMessage("修改成功", c)
+	err = global.DB.Model(&imageModel).Update("name", cr.Name).Error
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("图片名称修改成功", c)
 	return
 
 }

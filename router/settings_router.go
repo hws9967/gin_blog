@@ -8,7 +8,9 @@ import (
 func (ApiRouter) InitSettings(Router *gin.RouterGroup) {
 	routerApi := api.ApiGroupApp.SettingsApi
 	{
-		Router.GET("site_info", routerApi.SettingsInfoView)
-		Router.PUT("site_update", routerApi.SettingsInfoUpdateView)
+		Router.GET("setting/site", routerApi.SettingsSiteInfoView)
+		Router.PUT("setting/site", routerApi.SettingsSiteUpdateView)
+		Router.GET("settings/:name", routerApi.SettingsInfoView)
+		Router.PUT("settings/:name", routerApi.SettingsInfoUpdateView)
 	}
 }

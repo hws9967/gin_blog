@@ -1,4 +1,4 @@
-package array_type
+package ctype
 
 import (
 	"database/sql/driver"
