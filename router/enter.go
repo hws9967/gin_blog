@@ -22,5 +22,6 @@ func InitRouter() *gin.Engine {
 	PublicGroup := router.Group("api")
 	apiRouterGroup.InitSettings(PublicGroup)
 	apiRouterGroup.InitImage(PublicGroup)
+	apiRouterGroup.AdvertRouter(PublicGroup)
 	return router
 }
