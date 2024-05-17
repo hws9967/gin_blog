@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AdvertRemoveView 批量删除广告
+// @Tags 广告管理
+// @Summary 批量删除广告
+// @Description 批量删除广告
+// @Param data body models.RemoveRequest    true  "广告id列表"
+// @Param token header string  true  "token"
+// @Router /api/adverts [delete]
+// @Produce json
+// @Success 200 {object} res.Response{}
 func (AdvertApi) AdvertRemoveView(c *gin.Context) {
 	var cr models.RemoveRequest
 	err := c.ShouldBindJSON(&cr)
@@ -25,5 +34,5 @@ func (AdvertApi) AdvertRemoveView(c *gin.Context) {
 	}
 
 	global.DB.Delete(&advertList)
-	response.OkWithMessage(fmt.Sprintf("一共删除%s个广告", count), c)
+	response.OkWithMessage(fmt.Sprintf("一共删除 %d 个广告", count), c)
 }

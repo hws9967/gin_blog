@@ -8,6 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AdvertUpdateView 更新广告
+// @Tags 广告管理
+// @Summary 更新广告
+// @Description 更新广告
+// @Param data body AdvertRequest    true  "广告的一些参数"
+// @Param token header string  true  "token"
+// @Param id path int  true  "id"
+// @Router /api/adverts/{id} [put]
+// @Produce json
+// @Success 200 {object} res.Response{}
 func (AdvertApi) AdvertUpdateView(c *gin.Context) {
 	id := c.Param("id")
 	var cr AdvertRequest
@@ -29,10 +39,10 @@ func (AdvertApi) AdvertUpdateView(c *gin.Context) {
 	maps := structs.Map(&cr)
 	err = global.DB.Model(&advert).Updates(maps).Error
 	if err != nil {
-		response.FailWithMessage("更新失败", c)
+		response.FailWithMessage("修改广告失败", c)
 		return
 
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage("修改广告成功", c)
 	}
 
 }
