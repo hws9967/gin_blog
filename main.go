@@ -22,6 +22,8 @@ func main() {
 	global.DB = core.InitGorm()
 	// 初始化路由
 	router := router.InitRouter()
+	// 连接redis
+	global.Redis = core.ConnectRedis()
 	// 启动服务器
 
 	addr := global.Config.System.Addr()

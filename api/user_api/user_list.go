@@ -32,29 +32,39 @@ type UserListRequest struct {
 func (UserApi) UserListView(c *gin.Context) {
 	_claims, _ := c.Get("claims")
 	claims := _claims.(*jwts.CustomClaims)
+	/*token := c.Request.Header.Get("token")
+	if token == "" {
+		response.FailWithMessage("未携带token", c)
+		return
+	}
+	claims, err := jwts.ParseToken(token)
+	if err != nil {
+		response.FailWithMessage("token解析错误", c)
+		return
+	}*/
 	var page UserListRequest
 	if err := c.ShouldBindQuery(&page); err != nil {
 		response.FailWithCode(response.ArgumentError, c)
 		return
 	}
 	var users []UserResponse
-	list, count, _ := common.ComList(models.UserModel{Role: ctype.Role(page.Role)}, common.Option{
+	list, count, _ := common.ComList(models.UserModel{}, common.Option{
 		PageInfo: page.PageInfo,
 		Likes:    []string{"nick_name"},
 	})
+
 	for _, user := range list {
+		//不是管理员我就不给你提供用户名
 		if ctype.Role(claims.Role) != ctype.PermissionAdmin {
-			// 管理员
 			user.UserName = ""
 		}
+		//电话和邮箱都脱敏处理
 		user.Tel = desens.DesensitizationTel(user.Tel)
 		user.Email = desens.DesensitizationEmail(user.Email)
-		// 脱敏
 		users = append(users, UserResponse{
 			UserModel: user,
 			RoleID:    int(user.Role),
 		})
 	}
-
 	response.OkWithList(users, count, c)
 }

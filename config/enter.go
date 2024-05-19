@@ -9,4 +9,5 @@ type Config struct {
 	QiNiu    QiNiu    `yaml:"qi_niu"`
 	Jwy      Jwy      `yaml:"jwy"`
 	Email    Email    `yaml:"email"`
+	Redis    Redis    `yaml:"redis"`
 }

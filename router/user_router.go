@@ -2,6 +2,7 @@ package router
 
 import (
 	"gin_blog/api"
+	"gin_blog/middleware"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
@@ -9,11 +10,12 @@ import (
 var store = cookie.NewStore([]byte("HyvCD89g3VDJ9646BFGEh37GFJ"))
 
 func (ApiRouter) UserRouter(Router *gin.RouterGroup) {
-	advertRouterApi := api.ApiGroupApp.AdvertApi
+	userRouterApi := api.ApiGroupApp.UserApi
 	{
-		Router.GET("adverts", advertRouterApi.AdvertListView)
-		Router.POST("adverts", advertRouterApi.AdvertCreateView)
-		Router.PUT("adverts/:id", advertRouterApi.AdvertUpdateView)
-		Router.DELETE("adverts", advertRouterApi.AdvertRemoveView)
+		Router.POST("email_login", userRouterApi.EmailLoginView)
+		Router.GET("users", middleware.JwtAuth(), userRouterApi.UserListView)
+		Router.POST("user_bind_email", userRouterApi.UserBindEmailView)
+		Router.PUT("user_role", middleware.JwtAdmin(), userRouterApi.UserUpdateRoleView)
+		Router.POST("logout", middleware.JwtAuth(), userRouterApi.LogoutView)
 	}
 }

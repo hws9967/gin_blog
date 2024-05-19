@@ -6,8 +6,11 @@ import (
 )
 
 func (ApiRouter) AdvertRouter(Router *gin.RouterGroup) {
-	userRouterApi := api.ApiGroupApp.UserApi
+	advertRouterApi := api.ApiGroupApp.AdvertApi
 	{
-		Router.GET("users", userRouterApi.UserListView)
+		Router.POST("adverts", advertRouterApi.AdvertCreateView)
+		Router.GET("adverts", advertRouterApi.AdvertListView)
+		Router.PUT("adverts/:id", advertRouterApi.AdvertUpdateView)
+		Router.DELETE("adverts", advertRouterApi.AdvertRemoveView)
 	}
 }
