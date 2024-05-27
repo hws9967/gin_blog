@@ -28,5 +28,6 @@ func InitRouter() *gin.Engine {
 	apiRouterGroup.AdvertRouter(PublicGroup)
 	apiRouterGroup.MenuRouter(PublicGroup)
 	apiRouterGroup.UserRouter(PublicGroup)
+	apiRouterGroup.MessageRouter(PublicGroup)
 	return router
 }

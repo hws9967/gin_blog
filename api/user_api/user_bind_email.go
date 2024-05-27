@@ -44,6 +44,7 @@ func (UserApi) UserBindEmailView(c *gin.Context) {
 		// 生成4位验证码， 将生成的验证码存入session
 		code := random.Code(4)
 		// 写入session
+		//todo 其实我觉着写在redis中比较好一些
 		session.Set("valid_code", code)
 		err = session.Save()
 		if err != nil {
